@@ -1,40 +1,13 @@
-# org.kie.kogito.kogito-spring-boot-archetype - 1.32.0.Final #
+This is sample kogito project which build through gradle. The gradle script is just a wrapper around the maven build. There are additional plugins to generate openapi, packages dmn files in a seperate jar which can be opted out if you don't need it
 
-# mvn archetype:generate -DarchetypeGroupId=org.kie.kogito -DarchetypeArtifactId=kogito-spring-boot-archetype -DgroupId=com.bluepitch.dmn -DartifactId=sample-kogito -DarchetypeVersion=1.32.0.Final -Dversion=1.0.0-SNAPSHOT
+The gradle build only publishes the only the dmn artifacts to nexus. the whole springboot fat just is not published as needs to be packaged into a docker and pushed to artifactory/dockerhub.
 
-# Running
+Not if you build from int branch the artifacts with be published with -SNAPSHOT.
 
-- Compile and Run
+Pre-Requisite
+* gradle
+* maven
+* jdk11
 
-    ```
-    mvn clean package spring-boot:run    
-    ```
-
-# Test your application
-
-Generated application comes with sample test process that allows you to verify if the application is working as expected. Simply execute following command to try it out
-
-```sh
-curl -d '{}' -H "Content-Type: application/json" -X POST http://localhost:8080/greetings
-                                                             
-```
-
-Once successfully invoked you should see "Hello World" in the console of the running application.
-
-The generated application provides out of the box multiple samples of Kogito assets; you can reference the generated Swagger documentation and JUnit tests.
-
-# Developing
-
-Add your business assets resources (process definition, rules, decisions) into src/main/resources.
-
-Add your java classes (data model, utilities, services) into src/main/java.
-
-Then just build the project and run.
-
-
-# OpenAPI (Swagger) documentation
-[Specification at swagger.io](https://swagger.io/docs/specification/about/)
-
-You can take a look at the [OpenAPI definition](http://localhost:8080/v3/api-docs) - automatically generated and included in this service - to determine all available operations exposed by this service. For easy readability you can visualize the OpenAPI definition file using a UI tool like for example available [Swagger UI](https://editor.swagger.io).
-
-In addition, various clients to interact with this service can be easily generated using this OpenAPI definition.
+Build Command
+* gradle clean build publiToMavenLocal -Pversion=2.0.0-SNAPSHOT
