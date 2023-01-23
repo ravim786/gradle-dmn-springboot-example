@@ -1,0 +1,68 @@
+plugins {
+    id 'maven-publish'
+    id 'net.nemerosa.versioning' version '2.14.0'
+}
+
+group = 'com.bluepitch.dmn'
+def snapshotName = "${version != 'unspecified' && version.contains('SNAPSHOT') ? '-SNAPSHOT' : ''}"
+def snapshot = "${versioning.info.branch.contains('int') ? '' : snapshotName}"
+version = "${dmnVersion != 'unspecified' ? dmnVersion + snapshot : '1.0.0-SNAPSHOT'}"
+description = "Gradle DMN Springboot App"
+
+repositories {
+    mavenLocal()
+    maven {
+        url "https://repo1.maven.org/maven2/"
+    }
+}
+
+def dmnVersionCommand = "-DdmnappVersion=" + version
+task runMavenBuild(type: Exec) {
+    println "dmnVersionCommand: " + dmnVersionCommand
+    workingDir rootDir
+    commandLine 'mvn', 'clean', 'package', dmnVersionCommand
+}
+
+clean {
+    delete fileTree('target').include('/')
+    followSymlinks = true
+}
+
+build {
+    dependsOn runMavenBuild
+    doLast {
+        println "Copy : 'target/${project.name}-${version}.jar' to 'build/libs'"
+        copy {
+            from "target/${project.name}-${version}.jar"
+            into "build/libs"
+        }
+    }
+}
+
+task dmnJar(type: Jar) {
+    classifier 'dmn'
+    from layout.buildDirectory.file("../target/${project.name}-${version}-dmn.jar")
+    archiveClassifier = 'dmn'
+}
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = nexusUrl + "/repositories/releases/"
+            def snapshotsRepoUrl = nexusUrl + "/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username nexusUsername
+                password nexusPassword
+            }
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = group
+            version = version
+            artifact(dmnJar)
+        }
+    }
+}

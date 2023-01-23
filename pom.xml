@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.bluepitch.dmn</groupId>
+  <artifactId>kogito-dmnapp</artifactId>
+  <version>${dmnappVersion}</version>
+  <description>DTI Calculation DMN App</description>
+
+  <properties>
+    <dmnappVersion>2.0.0</dmnappVersion>
+    <java.version>11</java.version>
+    <springboot.bom.version>2.7.3</springboot.bom.version>
+    <kogito.bom.version>1.32.0.Final</kogito.bom.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>kogito-spring-boot-bom</artifactId>
+        <version>${kogito.bom.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${springboot.bom.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-spring-boot-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-decisions-spring-boot-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-processes-spring-boot-starter</artifactId>
+    </dependency>
+
+    <!-- utils (begin) -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.24</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <version>1.6.11</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>2.2.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.janino</groupId>
+      <artifactId>janino</artifactId>
+      <version>3.1.8</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+      <version>7.2</version>
+    </dependency>
+    <!-- utils (end) -->
+
+    <!-- test (begin) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-scenario-simulation</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- test (end) -->
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>kogito-maven-plugin</artifactId>
+        <version>${kogito.bom.version}</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+            <execution>
+                <phase>prepare-package</phase>
+                <configuration>
+                <target name="copy dmnDefinition.json">
+                    <copy file="${project.build.directory}/classes/META-INF/resources/dmnDefinitions.json" todir="${basedir}/src/main/resources"/>
+                 </target>
+                </configuration>
+                <goals>
+                <goal>run</goal>
+                </goals>
+            </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${springboot.bom.version}</version>
+        <executions>
+            <execution>
+                <goals>
+                    <goal>repackage</goal>
+                </goals>
+            </execution>
+            <execution>
+                <id>pre-integration-test</id>
+                <goals>
+                    <goal>start</goal>
+                </goals>
+            </execution>
+            <execution>
+                <id>post-integration-test</id>
+                <goals>
+                    <goal>stop</goal>
+                </goals>
+            </execution>
+        </executions>
+        <configuration>
+            <mainClass>${start-class}</mainClass>
+            <fork>true</fork>
+            <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <release>${java.version}</release>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+          <argLine>--illegal-access=permit ${argLine}</argLine>
+          <systemPropertyVariables>
+            <java.util.logging.manager>java.util.logging.LogManager</java.util.logging.manager>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-maven-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
+          <outputFileName>openapi.json</outputFileName>
+          <outputDir>src/main/resources</outputDir>
+          <skip>false</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.3.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>dmn</classifier>
+              <includes>
+                <include>**/*.dmn</include>
+                <include>**/*.bpmn</include>
+                <include>**/dmnDefinitions.json</include>
+                <include>**/openapi.json</include>
+              </includes>
+              <excludes>
+                <exclude>META-INF/**</exclude>
+              </excludes> 
+            </configuration>
+          </execution>
+        </executions>
+    </plugin>
+    </plugins>
+  </build>
+</project>
