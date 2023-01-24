@@ -2,6 +2,9 @@
 <dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="https://kiegroup.org/dmn/_4987E55B-BDAE-401E-BBFA-AD8412F4C0D7" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" id="_72C3BF91-E553-4997-B8F9-8BA70DC35551" name="pre-dti-calc" expressionLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="https://kiegroup.org/dmn/_4987E55B-BDAE-401E-BBFA-AD8412F4C0D7">
   <dmn:extensionElements/>
   <dmn:itemDefinition id="_092C4244-F413-464D-B02B-9740766DF19F" name="Borrower" isCollection="false">
+    <dmn:itemComponent id="_5CAF3E51-21A9-4B19-9D0E-91DBAEA4B458" name="label" isCollection="false">
+      <dmn:typeRef>string</dmn:typeRef>
+    </dmn:itemComponent>
     <dmn:itemComponent id="_4095C92A-9B87-4B2C-979C-4E06E0BEEBAD" name="incomes" isCollection="true">
       <dmn:typeRef>Income</dmn:typeRef>
     </dmn:itemComponent>
@@ -10,7 +13,7 @@
     <dmn:itemComponent id="_AD70B7EE-BA25-4EDD-B6BB-10EC37BF42D5" name="incomeType" isCollection="false">
       <dmn:typeRef>string</dmn:typeRef>
     </dmn:itemComponent>
-    <dmn:itemComponent id="_83B09878-141B-4090-BF45-2DE01731FBCD" name="currentIncomeMonthlyTotalAmount" isCollection="false">
+    <dmn:itemComponent id="_83B09878-141B-4090-BF45-2DE01731FBCD" name="incomeAmount" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
   </dmn:itemDefinition>
@@ -18,14 +21,11 @@
     <dmn:itemComponent id="_1CF8A133-4475-4F97-9652-B86701F4B58D" name="label" isCollection="false">
       <dmn:typeRef>string</dmn:typeRef>
     </dmn:itemComponent>
-    <dmn:itemComponent id="_4999D8B7-8B4B-4017-A28A-0034600E909C" name="monthlyPaymentAmount" isCollection="false">
+    <dmn:itemComponent id="_A5AB6F80-A1F5-411D-9BDB-0B6CE9E05997" name="liabilityType" isCollection="false">
+      <dmn:typeRef>string</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_4999D8B7-8B4B-4017-A28A-0034600E909C" name="liabilityAmount" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
-    </dmn:itemComponent>
-    <dmn:itemComponent id="_25D796A8-6665-4C93-8E02-5531577563B9" name="payoffStatusIndicator" isCollection="false">
-      <dmn:typeRef>boolean</dmn:typeRef>
-    </dmn:itemComponent>
-    <dmn:itemComponent id="_A263FF49-5A5D-40BA-BCDC-D1112115253D" name="exclusionIndicator" isCollection="false">
-      <dmn:typeRef>boolean</dmn:typeRef>
     </dmn:itemComponent>
   </dmn:itemDefinition>
   <dmn:itemDefinition id="_D68FF8FB-0286-4ADB-814D-2BD8610BDA60" name="loan" isCollection="false">
@@ -34,13 +34,10 @@
     </dmn:itemComponent>
   </dmn:itemDefinition>
   <dmn:itemDefinition id="_4523D93C-AB2A-4A9B-B883-32F70CED09D7" name="HousingExpense" isCollection="false">
-    <dmn:itemComponent id="_87F929E5-800D-4B3A-9B05-1DFA3C76BA48" name="timingType" isCollection="false">
+    <dmn:itemComponent id="_3E5E262E-D843-42CC-86C5-E3D5E9127F68" name="expenseType" isCollection="false">
       <dmn:typeRef>string</dmn:typeRef>
     </dmn:itemComponent>
-    <dmn:itemComponent id="_3E5E262E-D843-42CC-86C5-E3D5E9127F68" name="paymentType" isCollection="false">
-      <dmn:typeRef>string</dmn:typeRef>
-    </dmn:itemComponent>
-    <dmn:itemComponent id="_EC37C0BC-B88D-4220-B752-A6F0CA12E634" name="paymentAmount" isCollection="false">
+    <dmn:itemComponent id="_EC37C0BC-B88D-4220-B752-A6F0CA12E634" name="expenseAmount" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
   </dmn:itemDefinition>
@@ -94,14 +91,14 @@
         </dmn:literalExpression>
       </dmn:contextEntry>
       <dmn:contextEntry>
-        <dmn:variable id="_ADD3A422-1572-4529-8B1C-9B0079683CB4" name="allBorrowersMonthlyIncomeAmountList" typeRef="numberList"/>
+        <dmn:variable id="_ADD3A422-1572-4529-8B1C-9B0079683CB4" name="allBorrowersIncomeAmountList" typeRef="numberList"/>
         <dmn:literalExpression id="_E3397A27-7CB9-4773-913C-FA4D454CFEB9">
-          <dmn:text>allBorrowersIncomeList[incomeType != null].currentIncomeMonthlyTotalAmount</dmn:text>
+          <dmn:text>allBorrowersIncomeList[incomeType != null].incomeAmount</dmn:text>
         </dmn:literalExpression>
       </dmn:contextEntry>
       <dmn:contextEntry>
         <dmn:literalExpression id="_F170A52D-8ADE-491B-A45D-F2D99973FE56">
-          <dmn:text>sum(allBorrowersMonthlyIncomeAmountList)</dmn:text>
+          <dmn:text>sum(allBorrowersIncomeAmountList)</dmn:text>
         </dmn:literalExpression>
       </dmn:contextEntry>
     </dmn:context>
@@ -114,14 +111,14 @@
     </dmn:informationRequirement>
     <dmn:context id="_08D5549E-3B29-45C3-9948-C41D443B61C7">
       <dmn:contextEntry>
-        <dmn:variable id="_12F098FC-9D8D-4EE8-82CB-B1D7CD6D2396" name="filteredLiabilityMonthlyPaymentAmounts" typeRef="numberList"/>
+        <dmn:variable id="_12F098FC-9D8D-4EE8-82CB-B1D7CD6D2396" name="filteredLiabilityAmounts" typeRef="numberList"/>
         <dmn:literalExpression id="_34B65D36-0E97-4563-994F-B3516F45DA7B">
-          <dmn:text>filterLiabilitiesByBorrower[payoffStatusIndicator = false and exclusionIndicator = false].monthlyPaymentAmount</dmn:text>
+          <dmn:text>filterLiabilitiesByBorrower.liabilityAmount</dmn:text>
         </dmn:literalExpression>
       </dmn:contextEntry>
       <dmn:contextEntry>
         <dmn:literalExpression id="_1E794573-1081-4CAF-8FD9-A4527F77BC7E">
-          <dmn:text>sum(filteredLiabilityMonthlyPaymentAmounts)</dmn:text>
+          <dmn:text>sum(filteredLiabilityAmounts)</dmn:text>
         </dmn:literalExpression>
       </dmn:contextEntry>
     </dmn:context>
@@ -146,14 +143,14 @@
     </dmn:informationRequirement>
     <dmn:context id="_6D28FB3E-3C28-438B-8741-8CF5C87F2977">
       <dmn:contextEntry>
-        <dmn:variable id="_1E16F6EE-3A3B-4593-B04D-9E5E842E2A41" name="housingExpensePaymentAmountList" typeRef="numberList"/>
+        <dmn:variable id="_1E16F6EE-3A3B-4593-B04D-9E5E842E2A41" name="housingExpenseAmountList" typeRef="numberList"/>
         <dmn:literalExpression id="_E65B9C76-2C37-4D3F-946B-ABDD547ACDF1">
-          <dmn:text>loan.housingExpenses[timingType = "Proposed" or expenseType != "First Mortgage Principal And Interest"].paymentAmount</dmn:text>
+          <dmn:text>loan.housingExpenses[expenseType != "First Mortgage Principal And Interest"].expenseAmount</dmn:text>
         </dmn:literalExpression>
       </dmn:contextEntry>
       <dmn:contextEntry>
         <dmn:literalExpression id="_4BF86131-6E71-4CDA-B94D-0710C9BF86D9">
-          <dmn:text>sum(housingExpensePaymentAmountList)</dmn:text>
+          <dmn:text>sum(housingExpenseAmountList)</dmn:text>
         </dmn:literalExpression>
       </dmn:contextEntry>
     </dmn:context>
@@ -175,7 +172,7 @@
       <dmn:contextEntry>
         <dmn:variable id="_D5DA5467-38E1-4F16-85CC-6AC97D34D6FA" name="filteredLiabilityLabels" typeRef="stringList"/>
         <dmn:literalExpression id="_F5FC159D-4E74-4837-9CA3-79D8C415E2CF">
-          <dmn:text>relationships[contains(from, "BORROWER") and contains(to, "LIABILITY")].to</dmn:text>
+          <dmn:text>relationships[contains(from, "borrower") and contains(to, "liability")].to</dmn:text>
         </dmn:literalExpression>
       </dmn:contextEntry>
       <dmn:contextEntry>
@@ -272,11 +269,11 @@
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="120" y="106" width="750" height="243"/>
+        <dc:Bounds x="118" y="106" width="750" height="243"/>
         <dmndi:DMNLabel/>
         <dmndi:DMNDecisionServiceDividerLine>
-          <di:waypoint x="120" y="235"/>
-          <di:waypoint x="870" y="235"/>
+          <di:waypoint x="118" y="235"/>
+          <di:waypoint x="868" y="235"/>
         </dmndi:DMNDecisionServiceDividerLine>
       </dmndi:DMNShape>
       <dmndi:DMNShape id="dmnshape-drg-_399BDACB-3A3D-437D-A69D-00E6A8B0DC7B" dmnElementRef="_399BDACB-3A3D-437D-A69D-00E6A8B0DC7B" isCollapsed="false">
@@ -285,7 +282,7 @@
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="397.5" y="158" width="194" height="50"/>
+        <dc:Bounds x="383" y="159" width="194" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNShape id="dmnshape-drg-_E19B1A75-A47A-491F-B0C8-A88F4BDCFABF" dmnElementRef="_E19B1A75-A47A-491F-B0C8-A88F4BDCFABF" isCollapsed="false">
@@ -294,7 +291,7 @@
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="151.5" y="159" width="188" height="50"/>
+        <dc:Bounds x="149.5" y="159" width="188" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNShape id="dmnshape-drg-_160678C5-F0AC-4724-A0B2-D3B27D72D445" dmnElementRef="_160678C5-F0AC-4724-A0B2-D3B27D72D445" isCollapsed="false">
@@ -330,7 +327,7 @@
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="623" y="159" width="191" height="50"/>
+        <dc:Bounds x="621" y="159" width="191" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNShape id="dmnshape-drg-_7CB2138C-BFCB-49E3-97FE-58FBCEEAEB1D" dmnElementRef="_7CB2138C-BFCB-49E3-97FE-58FBCEEAEB1D" isCollapsed="false">
@@ -348,7 +345,7 @@
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="174.5" y="279" width="192" height="50"/>
+        <dc:Bounds x="172.5" y="279" width="192" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNShape id="dmnshape-drg-_95E35D0E-3DA9-4102-92C3-D69CEF2BE8A5" dmnElementRef="_95E35D0E-3DA9-4102-92C3-D69CEF2BE8A5" isCollapsed="false">
@@ -389,38 +386,38 @@
       </dmndi:DMNShape>
       <dmndi:DMNEdge id="dmnedge-drg-_012CB211-F4A5-45E0-B146-140448018FCD" dmnElementRef="_012CB211-F4A5-45E0-B146-140448018FCD">
         <di:waypoint x="503" y="447"/>
-        <di:waypoint x="494.5" y="208"/>
+        <di:waypoint x="480" y="209"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_5F0F4258-A18C-43DD-BBCB-5BE3E0031549" dmnElementRef="_5F0F4258-A18C-43DD-BBCB-5BE3E0031549">
-        <di:waypoint x="270.5" y="304"/>
-        <di:waypoint x="245.5" y="209"/>
+        <di:waypoint x="268.5" y="304"/>
+        <di:waypoint x="243.5" y="209"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_799D6E45-7E69-4AE8-B10F-36FD6D89138D" dmnElementRef="_799D6E45-7E69-4AE8-B10F-36FD6D89138D">
         <di:waypoint x="752" y="448"/>
-        <di:waypoint x="718.5" y="209"/>
+        <di:waypoint x="716.5" y="209"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_CEA8F204-81DB-41D0-8CE0-54B7C4E93C03" dmnElementRef="_CEA8F204-81DB-41D0-8CE0-54B7C4E93C03">
         <di:waypoint x="232" y="448"/>
-        <di:waypoint x="270.5" y="329"/>
+        <di:waypoint x="268.5" y="329"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_8119CC18-0D5A-403E-89B8-74D4FCC540A5" dmnElementRef="_8119CC18-0D5A-403E-89B8-74D4FCC540A5">
         <di:waypoint x="359" y="447.3421052631579"/>
-        <di:waypoint x="270.5" y="329"/>
+        <di:waypoint x="268.5" y="329"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_964C28B5-9CA1-47FC-81D0-F33561A7BA5F" dmnElementRef="_964C28B5-9CA1-47FC-81D0-F33561A7BA5F">
-        <di:waypoint x="270.5" y="304"/>
+        <di:waypoint x="268.5" y="304"/>
         <di:waypoint x="107" y="397.5"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_6F0063F7-F0DF-4781-9079-D115BACDCC3A" dmnElementRef="_6F0063F7-F0DF-4781-9079-D115BACDCC3A">
-        <di:waypoint x="245.5" y="184"/>
+        <di:waypoint x="243.5" y="184"/>
         <di:waypoint x="379" y="42"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_4F60786E-F9B6-4490-AA35-D051E0A843DC" dmnElementRef="_4F60786E-F9B6-4490-AA35-D051E0A843DC">
-        <di:waypoint x="494.5" y="183"/>
+        <di:waypoint x="480" y="184"/>
         <di:waypoint x="613" y="36"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_173994B6-8612-4E0F-A4FD-E76201B4EC94" dmnElementRef="_173994B6-8612-4E0F-A4FD-E76201B4EC94">
-        <di:waypoint x="718.5" y="184"/>
+        <di:waypoint x="716.5" y="184"/>
         <di:waypoint x="870" y="42"/>
       </dmndi:DMNEdge>
     </dmndi:DMNDiagram>

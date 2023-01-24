@@ -1,0 +1,42 @@
+{
+    "loan": {
+        "housingExpenses": [
+            {"expenseType": "HOA", "expenseAmount": 65},
+            {"expenseType": "HomeOwnersInsurance", "expenseAmount": 310},
+            {"expenseType": "Other", "expenseAmount": 90},
+            {"expenseType": "FirstMortgagePrincipalAndInterest", "expenseAmount": 1260},
+            {"expenseType": "PMIInsurance", "expenseAmount": 100}
+        ]
+    },
+    "borrowers": [
+        {
+            "label": "borrower1",
+            "incomes": [
+                {"incomeType":"Base", "incomeAmount": 2690},
+                {"incomeType":"Overtime", "incomeAmount": 950},
+                {"incomeType":"HousingAllowance", "incomeAmount": 250}
+            ]
+        },
+        {
+            "label": "borrower2",
+            "incomes": [
+                {"incomeType":"Base", "incomeAmount": 1200},
+                {"incomeType":"Bonus", "incomeAmount": 100}
+            ]
+        }
+    ],
+    "liabilities":[
+        { "label":"liability1", "liabilityType": "Lease", "liabilityAmount": 365},
+        { "label":"liability2", "liabilityType": "Mortgage", "liabilityAmount": 1011},
+        { "label":"liability3", "liabilityType": "Installment", "liabilityAmount": 150},
+        { "label":"liability4", "liabilityType": "Other", "liabilityAmount": 85},
+        { "label":"liability5", "liabilityType": "Lease", "liabilityAmount": 126}
+    ],
+    "relationships":[
+        {"from": "borrower1", "to": "liability1"},
+        {"from": "borrower1", "to": "liability2"},
+        {"from": "borrower1", "to": "liability3"},
+        {"from": "borrower2", "to": "liability4"},
+        {"from": "borrower2", "to": "liability5"}
+    ]
+}
