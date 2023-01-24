@@ -24,6 +24,12 @@ task runMavenBuild(type: Exec) {
     commandLine 'mvn', 'clean', 'verify', mvnCommandArgs
 }
 
+task bootRun(type: Exec) {
+    println "command: mvn clean verify spring-boot:run " + mvnCommandArgs
+    workingDir rootDir
+    commandLine 'mvn', 'clean', 'verify', 'spring-boot:run', mvnCommandArgs
+}
+
 clean {
     delete fileTree('target').include('/')
     delete ('src/main/resources/dmnDefinitions.json')

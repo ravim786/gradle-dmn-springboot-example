@@ -17,4 +17,8 @@ Pre-Requisite
 Build Command
 * gradle clean build publiToMavenLocal -Pversion=2.0.0-SNAPSHOT
 
+Run
+* gradle clean bootRun
 
+Swagger
+* http://localhost:8080/swagger-ui.html

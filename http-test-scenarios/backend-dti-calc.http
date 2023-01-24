@@ -1,0 +1,48 @@
+@host=http://localhost:8080
+
+### execute dmn ###
+POST {{host}}/backend-dti-calc http/1.1
+Content-Type: application/json
+
+{
+    "aggregatedBorrowerIncome": 110000,
+    "aggregatedHousingExpense": 900,
+    "aggregatedLiabilityAmount": 2000
+}
+
+### execute dmn service ###
+POST {{host}}/backend-dti-calc/backendDTICalculationService http/1.1
+Content-Type: application/json
+
+{
+    "aggregatedBorrowerIncome": 110000,
+    "aggregatedHousingExpense": 900,
+    "aggregatedLiabilityAmount": 2000
+}
+
+### execute dmn with no data ###
+POST {{host}}/backend-dti-calc http/1.1
+Content-Type: application/json
+
+{
+}
+
+### execute dmn with audit ###
+POST {{host}}/backend-dti-calc/dmnresult http/1.1
+Content-Type: application/json
+
+{
+    "aggregatedBorrowerIncome": 110000,
+    "aggregatedHousingExpense": 900,
+    "aggregatedLiabilityAmount": 2000
+}
+
+### execute dmn with invalid data ###
+POST {{host}}/backend-dti-calc http/1.1
+Content-Type: application/json
+
+{
+    "aggregatedBorrowerIncome": 0,
+    "aggregatedHousingExpense": 900,
+    "aggregatedLiabilityAmount": 2000
+}
