@@ -8,6 +8,13 @@ Pre-Requisite
 * gradle
 * maven
 * jdk11
+* VSCode
+    * Red Hat Business Automation Bundle
+    * Rest Client
+    * Extension Pack for Java
+    * Gradle for Java
 
 Build Command
 * gradle clean build publiToMavenLocal -Pversion=2.0.0-SNAPSHOT
+
+
