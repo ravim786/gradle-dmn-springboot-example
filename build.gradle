@@ -17,11 +17,11 @@ repositories {
     }
 }
 
-def dmnVersionCommand = "-DdmnappVersion=" + version
+def mvnCommandArgs = "-DdmnappVersion=" + version
 task runMavenBuild(type: Exec) {
-    println "dmnVersionCommand: " + dmnVersionCommand
+    println "command: mvn clean verify " + mvnCommandArgs
     workingDir rootDir
-    commandLine 'mvn', 'clean', 'verify', dmnVersionCommand
+    commandLine 'mvn', 'clean', 'verify', mvnCommandArgs
 }
 
 clean {
@@ -33,7 +33,8 @@ clean {
 
 build {
     dependsOn runMavenBuild
-
+    if(findProperty('nexusUrl') != "")
+        finalizedBy publish
     doLast {
         println "Copy : 'target/${project.name}-${version}.jar' to 'build/libs'"
         copy {
