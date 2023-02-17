@@ -2,7 +2,10 @@ This is sample kogito project which build through gradle. The gradle script is j
 
 The gradle build only publishes the dmn artifacts to nexus. the whole springboot fat jar is not published as needs to be packaged into a docker and pushed to artifactory/dockerhub.
 
-Note: if you build from int branch the artifacts with be published without -SNAPSHOT.
+Note: 
+* if you build from int branch the artifacts with be published without -SNAPSHOT.
+* please also make sure to provide the jdk11 path in gradle.properties
+* also the version is defaulted to '1.0.0-SNAPSHOT' in gradle.properties
 
 Pre-Requisite
 * gradle
