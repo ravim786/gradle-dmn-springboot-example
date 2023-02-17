@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.bluepitch.dmn</groupId>
   <artifactId>kogito-dmnapp</artifactId>
-  <version>${dmnappVersion}</version>
-  <description>DTI Calculation DMN App</description>
+  <version>${appVersion}</version>
+  <description>Sample DTI Calculation DMN App</description>
 
   <properties>
-    <dmnappVersion>2.0.0</dmnappVersion>
+    <appVersion>1.0.0-SNAPSHOT</appVersion>
     <java.version>11</java.version>
     <springboot.bom.version>2.7.3</springboot.bom.version>
     <kogito.bom.version>1.33.0.Final</kogito.bom.version>

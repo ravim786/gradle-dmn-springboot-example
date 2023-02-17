@@ -1,4 +1,4 @@
-This is sample kogito project which build through gradle. The gradle script is just a wrapper around the maven build. There are additional plugins to generate openapi, packages dmn files in a seperate jar which can be opted out if you don't need it
+This is sample kogito project which build through gradle. The gradle script is just a wrapper around the maven build. There are additional plugins to generate swagger.json, packages dmn files in a seperate jar which can be opted out if you don't need it
 
 The gradle build only publishes the dmn artifacts to nexus. the whole springboot fat jar is not published as needs to be packaged into a docker and pushed to artifactory/dockerhub.
 
@@ -18,7 +18,10 @@ Pre-Requisite
     * Gradle for Java
 
 Build Command
-* gradle clean build -Pversion=2.0.0-SNAPSHOT
+* gradle clean build -Pversion=1.0.0
+
+Maven Command
+* mvn clean install -DappVersion=1.0.0
 
 Run
 * gradle clean bootRun

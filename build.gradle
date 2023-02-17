@@ -18,7 +18,7 @@ repositories {
 }
 
 def osName = System.getProperty("os.name").toLowerCase(Locale.ENGLISH)
-def mvnCommandArgs = "-DdmnappVersion=" + version
+def mvnCommandArgs = "-DappVersion=" + version
 task runMavenBuild(type: Exec) {
     println "command: mvn clean verify " + mvnCommandArgs
     workingDir rootDir
