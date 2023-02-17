@@ -11,7 +11,10 @@
     <dmnappVersion>2.0.0</dmnappVersion>
     <java.version>11</java.version>
     <springboot.bom.version>2.7.3</springboot.bom.version>
-    <kogito.bom.version>1.32.0.Final</kogito.bom.version>
+    <kogito.bom.version>1.33.0.Final</kogito.bom.version>
+
+    <apispec.filename>swagger.json</apispec.filename>
+    <apispec.filepath>${project.basedir}/src/main/resources</apispec.filepath>
   </properties>
 
   <dependencyManagement>
@@ -217,8 +220,8 @@
         </executions>
         <configuration>
           <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
-          <outputFileName>openapi.json</outputFileName>
-          <outputDir>src/main/resources</outputDir>
+          <outputFileName>${apispec.filename}</outputFileName>
+          <outputDir>${apispec.filepath}</outputDir>
           <skip>false</skip>
         </configuration>
       </plugin>
@@ -238,7 +241,7 @@
                 <include>**/*.dmn</include>
                 <include>**/*.bpmn</include>
                 <include>**/dmnDefinitions.json</include>
-                <include>**/openapi.json</include>
+                <include>**/${apispec.filename}</include>
               </includes>
               <excludes>
                 <exclude>META-INF/**</exclude>

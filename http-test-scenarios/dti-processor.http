@@ -1,13 +1,13 @@
 @host=http://localhost:8080
 
 ### execute all dmns ###
-POST {{host}}//dti_processor http/1.1
+POST {{host}}/dti_processor http/1.1
 Content-Type: application/json
 
-< ./pdti-processor-scenarios/happypath.json
+< ./dti-processor-scenarios/happypath.json
 
 ### skip pre-dti-cals dmn ###
-POST {{host}}//dti_processor http/1.1
+POST {{host}}/dti_processor http/1.1
 Content-Type: application/json
 
-< ./pdti-processor-scenarios/skip-pre-dti-calc.json
+< ./dti-processor-scenarios/skip-pre-dti-calcs.json

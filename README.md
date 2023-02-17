@@ -15,7 +15,7 @@ Pre-Requisite
     * Gradle for Java
 
 Build Command
-* gradle clean build publiToMavenLocal -Pversion=2.0.0-SNAPSHOT
+* gradle clean build -Pversion=2.0.0-SNAPSHOT
 
 Run
 * gradle clean bootRun

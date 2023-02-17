@@ -7,7 +7,7 @@ plugins {
 group = 'com.bluepitch.dmn'
 def snapshotName = "${version != 'unspecified' && version.contains('SNAPSHOT') ? '-SNAPSHOT' : ''}"
 def snapshot = "${versioning.info.branch.contains('int') ? '' : snapshotName}"
-version = "${versioning.info.branch.contains('int') ? version.replace('-SNAPSHOT', '') : version + snapshotName}"
+version = "${versioning.info.branch.startsWith('int') ? version.replace('-SNAPSHOT', '') : version + snapshotName}"
 description = "Gradle DMN Springboot App"
 
 repositories {
@@ -17,17 +17,26 @@ repositories {
     }
 }
 
+def osName = System.getProperty("os.name").toLowerCase(Locale.ENGLISH)
 def mvnCommandArgs = "-DdmnappVersion=" + version
 task runMavenBuild(type: Exec) {
     println "command: mvn clean verify " + mvnCommandArgs
     workingDir rootDir
-    commandLine 'mvn', 'clean', 'verify', mvnCommandArgs
+    environment 'JAVA_HOME', jdk11Path
+    if(osName.contains("windows"))
+        commandLine 'mvn.cmd', 'clean', 'verify', mvnCommandArgs
+    else
+        commandLine 'mvn', 'clean', 'verify', mvnCommandArgs
 }
 
 task bootRun(type: Exec) {
     println "command: mvn clean verify spring-boot:run " + mvnCommandArgs
     workingDir rootDir
-    commandLine 'mvn', 'clean', 'verify', 'spring-boot:run', mvnCommandArgs
+    environment 'JAVA_HOME', jdk11Path
+    if(osName.contains("windows"))
+        commandLine 'mvn.cmd', 'clean', 'verify', 'spring-boot:run', mvnCommandArgs
+    else
+        commandLine 'mvn', 'clean', 'verify', 'spring-boot:run', mvnCommandArgs
 }
 
 clean {
@@ -35,19 +44,6 @@ clean {
     delete ('src/main/resources/dmnDefinitions.json')
     delete ('src/main/resources/openapi.json')
     followSymlinks = true
-}
-
-build {
-    dependsOn runMavenBuild
-    if(findProperty('nexusUrl') != "")
-        finalizedBy publish
-    doLast {
-        println "Copy : 'target/${project.name}-${version}.jar' to 'build/libs'"
-        copy {
-            from "target/${project.name}-${version}.jar"
-            into "build/libs"
-        }
-    }
 }
 
 task dmnJar(type: Jar) {
@@ -74,6 +70,25 @@ publishing {
             groupId = group
             version = version
             artifact(dmnJar)
+        }
+    }
+}
+
+build {
+    dependsOn runMavenBuild
+    if(findProperty('nexusUrl') != "")
+        finalizedBy publish
+    else
+        finalizedBy publishToMavenLocal    
+    doLast {
+        println "Copy : 'target/${project.name}-${version}.jar' to 'build/libs'"
+        copy {
+            from "target/${project.name}-${version}.jar"
+            into "build/libs"
+        }
+        copy {
+            from "target/${project.name}-${version}-dmn.jar"
+            into "build/libs"
         }
     }
 }
