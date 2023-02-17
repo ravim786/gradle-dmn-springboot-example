@@ -18,13 +18,16 @@ Pre-Requisite
     * Gradle for Java
 
 Build Command
-* gradle clean build -Pversion=1.0.0
+* Gradle 
+   * gradle clean build -Pversion=1.0.0
+* Maven
+   * mvn clean install -DappVersion=1.0.0
 
-Maven Command
-* mvn clean install -DappVersion=1.0.0
-
-Run
-* gradle clean bootRun
+Run Command
+* Gradle 
+   * gradle clean build bootRun
+* Maven
+   * mvn clean spring-boot:run
 
 Swagger
 * http://localhost:8080/swagger-ui.html
