@@ -18,11 +18,13 @@ repositories {
 }
 
 def osName = System.getProperty("os.name").toLowerCase(Locale.ENGLISH)
+def osJavaHome = "${findProperty('jdkHome') != null ? findProperty('jdkHome') : System.getProperty("java.home")}"
+
 def mvnCommandArgs = "-DappVersion=" + version
 task runMavenBuild(type: Exec) {
     println "command: mvn clean verify " + mvnCommandArgs
     workingDir rootDir
-    environment 'JAVA_HOME', jdk11Path
+    environment 'JAVA_HOME', osJavaHome
     if(osName.contains("windows"))
         commandLine 'mvn.cmd', 'clean', 'verify', mvnCommandArgs
     else
@@ -32,7 +34,7 @@ task runMavenBuild(type: Exec) {
 task bootRun(type: Exec) {
     println "command: mvn clean verify spring-boot:run " + mvnCommandArgs
     workingDir rootDir
-    environment 'JAVA_HOME', jdk11Path
+    environment 'JAVA_HOME', osJavaHome
     if(osName.contains("windows"))
         commandLine 'mvn.cmd', 'clean', 'verify', 'spring-boot:run', mvnCommandArgs
     else
