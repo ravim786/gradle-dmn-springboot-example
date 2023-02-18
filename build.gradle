@@ -18,7 +18,7 @@ repositories {
 }
 
 def osName = System.getProperty("os.name").toLowerCase(Locale.ENGLISH)
-def osJavaHome = "${(findProperty('jdkHome') != null && findProperty('nexusUrl') == "") ? findProperty('jdkHome') : System.getProperty("java.home")}"
+def osJavaHome = "${findProperty('jdkHome') != null ? findProperty('jdkHome') : System.getProperty("java.home")}"
 
 def mvnCommandArgs = "-DappVersion=" + version
 task runMavenBuild(type: Exec) {
