@@ -37,5 +37,7 @@ out/
 .vscode/
 
 /src/main/resources/swagger.json
+/src/main/resources/openapi.json
+/src/main/resources/openapi.yml
 /src/main/resources/dmnDefinitions.json
 /target
