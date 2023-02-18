@@ -4,7 +4,7 @@ The gradle build only publishes the dmn artifacts to nexus. the whole springboot
 
 Note: 
 * The build from int branch will strip off '-SNAPSHOT', from the version.
-* Provide the javaHome path in gradle.properties, if not the script picks from systems path 
+* Provide the javaHome path in gradle.properties, in case of CICD, the script picks from systems path 
 * The default version is set to '1.0.0-SNAPSHOT' in gradle.properties
 
 Pre-Requisite
