@@ -42,15 +42,35 @@ task bootRun(type: Exec) {
 }
 
 clean {
+    delete fileTree('build').include('/')
     delete fileTree('target').include('/')
     delete ('src/main/resources/dmnDefinitions.json')
     delete ('src/main/resources/openapi.json')
     followSymlinks = true
 }
 
+build {
+    dependsOn runMavenBuild
+    if(findProperty('nexusUrl') != "")
+        finalizedBy publish
+    else
+        finalizedBy publishToMavenLocal    
+    doLast {
+        println "Copy : 'target/${project.name}-${version}.jar' to 'build/libs'"
+        copy {
+            from "target/${project.name}-${version}.jar"
+            into "build/libs"
+        }
+        copy {
+            from "target/${project.name}-${version}-dmn.jar"
+            into "build/libs"
+        }
+    }
+}
+
 task dmnJar(type: Jar) {
     classifier 'dmn'
-    from layout.buildDirectory.file("../target/${project.name}-${version}-dmn.jar")
+    from layout.buildDirectory.file("libs/${project.name}-${version}-dmn.jar")
     archiveClassifier = 'dmn'
 }
 
@@ -72,25 +92,6 @@ publishing {
             groupId = group
             version = version
             artifact(dmnJar)
-        }
-    }
-}
-
-build {
-    dependsOn runMavenBuild
-    if(findProperty('nexusUrl') != "")
-        finalizedBy publish
-    else
-        finalizedBy publishToMavenLocal    
-    doLast {
-        println "Copy : 'target/${project.name}-${version}.jar' to 'build/libs'"
-        copy {
-            from "target/${project.name}-${version}.jar"
-            into "build/libs"
-        }
-        copy {
-            from "target/${project.name}-${version}-dmn.jar"
-            into "build/libs"
         }
     }
 }
