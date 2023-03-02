@@ -18,13 +18,12 @@ repositories {
 }
 
 def osName = System.getProperty("os.name").toLowerCase(Locale.ENGLISH)
-def osJavaHome = "${findProperty('jdkHome') != null ? findProperty('jdkHome') : System.getProperty("java.home")}"
 
 def mvnCommandArgs = "-DappVersion=" + version
 task runMavenBuild(type: Exec) {
     println "command: mvn clean verify " + mvnCommandArgs
     workingDir rootDir
-    environment 'JAVA_HOME', osJavaHome
+    environment 'JAVA_HOME', jdkHome
     if(osName.contains("windows"))
         commandLine 'mvn.cmd', 'clean', 'verify', mvnCommandArgs
     else
